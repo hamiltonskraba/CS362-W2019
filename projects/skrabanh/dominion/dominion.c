@@ -654,12 +654,12 @@ int smithyEffect(int handPos, struct gameState *state) {
 	}
 
 	//discard card from hand
-	discardCard(handPos, currentPlayer, state, 0);
+	discardCard(handPos--, currentPlayer, state, 0);
 	return 0;
 }
 
 int adventurerEffect(struct gameState *state) {
-	int drawntreasure = 0;
+	int drawntreasure = 2; 
 	int currentPlayer = whoseTurn(state);
 	int cardDrawn;
 	int temphand[MAX_HAND];
@@ -691,6 +691,7 @@ int villageEffect(int handPos, struct gameState *state) {
 
 	//+1 Card
 	drawCard(currentPlayer, state);
+	drawCard(currentPlayer, state); 
 
 	//+2 Actions
 	state->numActions = state->numActions + 2;
@@ -727,7 +728,7 @@ int councilroomEffect(int handPos, struct gameState *state) {
 	state->numBuys++;
 
 	//Each other player draws a card
-	for (i = 0; i < state->numPlayers; i++)
+	for (i = 1; i < state->numPlayers; i++)
 	{
 		if (i != currentPlayer)
 		{
