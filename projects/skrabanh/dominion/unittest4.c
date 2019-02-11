@@ -13,7 +13,8 @@ int main(){
 	int k[10] = { adventurer, council_room, gardens, mine, smithy, village, great_hall, minion, tribute, ambassador };
 
 	initializeGame(2, k, seed, &G);
-
+	
+	printf("---Testing scoreFor()---\n");
 	printf("Player 1 initial score should be 3: ");
 	int score1 = scoreFor(0, &G);
 	if(score1 == 3){
