@@ -24,6 +24,7 @@ import junit.framework.TestCase;
  */
 public class UrlValidatorTest extends TestCase {
 
+	public static int counter = 0;
    private final boolean printStatus = false;
    private final boolean printIndex = false;//print index that indicates current scheme,host,port,path, query test were using.
 
@@ -41,6 +42,7 @@ protected void setUp() {
    public void testIsValid() {
         testIsValid(testUrlParts, UrlValidator.ALLOW_ALL_SCHEMES);
         setUp();
+
 //        int options =
 //            UrlValidator.ALLOW_2_SLASHES
 //                + UrlValidator.ALLOW_ALL_SCHEMES
@@ -50,6 +52,7 @@ protected void setUp() {
    }
 
    public void testIsValidScheme() {
+
       if (printStatus) {
          System.out.print("\n testIsValidScheme() ");
       }
@@ -81,6 +84,7 @@ protected void setUp() {
     * @param testObjects Used to create a url.
     */
    public void testIsValid(Object[] testObjects, long allowAllSchemes) {
+ 
 	      UrlValidator urlVal = new UrlValidator(null, null, allowAllSchemes);
 	      //UrlValidator urlVal = new UrlValidator(null, allowAllSchemes);
       assertTrue(urlVal.isValid("http://www.google.com"));
@@ -103,6 +107,7 @@ protected void setUp() {
          boolean result = urlVal.isValid(url);
          if(result == true)
         	 System.out.println(url);
+	      counter++;
          assertEquals(url, expected, result);
          if (printStatus) {
             if (printIndex) {
@@ -189,6 +194,7 @@ protected void setUp() {
       fct.setUp();
       fct.testIsValid();
       fct.testIsValidScheme();
+      System.out.println(counter);
    }
    //-------------------- Test data for creating a composite URL
    /**
