@@ -1,0 +1,65 @@
+Result for running unit tests:
+unittest1.c:
+True: state is not null
+True: state is sizeof gameState
+File 'dominion.c'
+Lines executed:0.48% of 627
+Creating 'dominion.c.gcov'
+
+unittest2.c:
+True: returns error on empty state
+True: returns error on initialized, but empty deck
+True: empty user deck still runs
+True: state shuffle should be equal
+File 'dominion.c'
+Lines executed:6.54% of 627
+Creating 'dominion.c.gcov'
+
+unittest3.c:
+True: counts 0 for no cards
+True: counts 7 for initial copper
+True: double copper size
+File 'dominion.c'
+Lines executed:18.34% of 627
+Creating 'dominion.c.gcov'
+
+unittest4.c:
+True: initial turn is 0
+True: initial turn can be set
+File 'dominion.c'
+Lines executed:16.75% of 627
+Creating 'dominion.c.gcov'
+
+cardtest1.c:
+True: discard pile should be 0
+True: handCount should be 7
+True: deckCount should be 3
+File 'dominion.c'
+Lines executed:19.78% of 627
+Creating 'dominion.c.gcov'
+
+cardtest2.c:
+False: draws three cards
+False: deckCount should be 2
+File 'dominion.c'
+Lines executed:20.89% of 627
+Creating 'dominion.c.gcov'
+
+cardtest3.c:
+True: province should return error
+True: out of bounds card should return error
+True: cost is greater should return error
+True: valid cards should run without error
+File 'dominion.c'
+Lines executed:25.36% of 627
+Creating 'dominion.c.gcov'
+
+cardtest4.c:
+True: adds and removes a card to hand
+True: a card is played
+True: removes one card from the deck
+False: should get an extra 2 actions
+File 'dominion.c'
+Lines executed:20.89% of 627
+Creating 'dominion.c.gcov'
+
