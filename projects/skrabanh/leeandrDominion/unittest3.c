@@ -1,33 +1,40 @@
-/**
- * gcc test_helper.c rngs.c dominion.c unittest3.c -lm -o testing -std=c99
- * 
- * Tests fullDeckCount in dominion.c
- * */
-
 #include <stdlib.h>
 #include <stdio.h>
-#include <string.h>
 #include "dominion.h"
-#include "test_helper.h"
+#include "dominion_helpers.h"
 
-void testFullDeckCount()
-{
-  struct gameState *state = newGame();
-  int *kCards = kingdomCards(0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
-  initializeGame(2, kCards, 1, state);
 
-  assertEqual("counts 0 for no cards", 0, fullDeckCount(0, 11, state));
-  assertEqual("counts 7 for initial copper", 7, fullDeckCount(0, copper, state));
+//unit test for getCost()
 
-  memcpy(state->discard[0], state->deck[0], sizeof(state->deck[0]));
-  state->discardCount[0] = 10;
-  assertEqual("double copper size", 14, fullDeckCount(0, copper, state));
+int main(){	
+	printf("---Testing getCost()---\n");
+	printf("Checking that curse cards cost nothing: ");
+	if(getCost(curse) == 0){
+		printf("Passed!\n");
+	} else{
+		printf("Failed!\n");
+	}
 
-  free(state);
-}
+	printf("Checking that province cards cost 8: ");
+	if(getCost(province) == 8){
+		printf("Passed!\n");
+	} else{
+		printf("Failed!\n");
+	}
 
-int main()
-{
-  testFullDeckCount();
-  return 0;
+	printf("Checking that village cards cost 3: ");
+	if(getCost(village) == 3){
+		printf("Passed!\n");
+	} else{
+		printf("Failed!\n");
+	}
+
+	printf("Checking that council room cards cost 5: ");
+	if(getCost(council_room) == 5){
+		printf("Passed!\n");
+	} else{
+		printf("Failed!\n");
+	}
+
+	return 0;
 }

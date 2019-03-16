@@ -1,31 +1,53 @@
-/**
- * gcc test_helper.c rngs.c dominion.c unittest4.c -lm -o testing -std=c99
- * 
- * Tests whoseTurn in dominion.c
- * */
-
 #include <stdlib.h>
 #include <stdio.h>
-#include <string.h>
 #include "dominion.h"
-#include "test_helper.h"
+#include "dominion_helpers.h"
 
-void testWhoseTurn()
-{
-  struct gameState *state = newGame();
-  int *kCards = kingdomCards(0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
-  initializeGame(2, kCards, 1, state);
 
-  assertEqual("initial turn is 0", 0, whoseTurn(state));
-  state->whoseTurn = 16;
+//unit test for scoreFor()
 
-  assertEqual("initial turn can be set", 16, whoseTurn(state));
+int main(){	
+	int seed = 1000;
+	struct gameState G;
 
-  free(state);
-}
+	int k[10] = { adventurer, council_room, gardens, mine, smithy, village, great_hall, minion, tribute, ambassador };
 
-int main()
-{
-  testWhoseTurn();
-  return 0;
+	initializeGame(2, k, seed, &G);
+	
+	printf("---Testing scoreFor()---\n");
+	printf("Player 1 initial score should be 3: ");
+	int score1 = scoreFor(0, &G);
+	if(score1 == 3){
+		printf("Passed!");
+	} else{
+		printf("Failed! Score is %d\n", score1);
+	}
+
+	printf("Player 2 initial score should be 3: ");
+	int score2 = scoreFor(1, &G);
+	if(score2 == 3){
+		printf("Passed!");
+	} else{
+		printf("Failed! Score is %d\n", score1);
+	}
+	
+	printf("Player 1 gains a province: ");
+	gainCard(province, &G, 2, 0);
+	score1 += 6;
+	if(scoreFor(0, &G) == score1){
+		printf("Passed! Score is %d\n", score1);
+	} else{
+		printf("Failed! Score is %d\n", score1);
+	}
+
+	printf("Player 2 gains a curse: ");
+	gainCard(curse, &G, 2, 1);
+	score2 -= 1;
+	if(scoreFor(1, &G) == score2){
+		printf("Passed! Score is %d\n", score2);
+	} else{
+		printf("Failed! Score is %d\n", score2);
+	}
+	
+	return 0;
 }

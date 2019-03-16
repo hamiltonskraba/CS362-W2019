@@ -1,25 +1,61 @@
-/**
- * gcc test_helper.c rngs.c dominion.c unittest1.c -lm -o testing -std=c99
- * 
- * Tests newGame in dominion.c
- * */
-
 #include <stdlib.h>
 #include <stdio.h>
-#include <string.h>
 #include "dominion.h"
-#include "test_helper.h"
+#include "dominion_helpers.h"
+#include "rngs.h"
 
-void testNewGame()
-{
-  struct gameState *state = newGame();
-  assertEqual("state is not null", state != NULL, 1);
-  assertEqual("state is sizeof gameState", sizeof(*state), sizeof(struct gameState));
-  free(state);
-}
+//unit testing for isGameOver()
 
-int main()
-{
-  testNewGame();
-  return 0;
+int main() {
+	int seed = 1000;
+	int k[10] = { adventurer, council_room, gardens, mine, smithy, village, great_hall, minion, tribute, ambassador };
+	struct gameState G;
+
+	printf("---Testing isGameOver()---\n");
+
+	initializeGame(MAX_PLAYERS, k, seed, &G);
+
+	printf("Testing Province count != 0: ");		//should return false
+	G.supplyCount[province] = 1;
+
+	if (isGameOver(&G)) {
+		printf("Failed\n");
+	}
+	else {
+		printf("Passed\n");
+	}
+
+	printf("Testing Province count = 0: ");		//should return true
+	G.supplyCount[province] = 0;
+
+	if (isGameOver(&G)) {
+		printf("Passed\n");
+	}
+	else {
+		printf("Failed\n");
+	}
+
+	printf("Testing 1 empty supply pile with providences still in play: ");		//should return false
+	G.supplyCount[province] = 4;
+	G.supplyCount[1] = 0;
+
+	if (isGameOver(&G)) {
+		printf("Failed\n");
+	}
+	else {
+		printf("Passed\n");
+	}
+
+	printf("Testing 3 empty supply piles with providences still in play: ");		//should return true
+	G.supplyCount[0] = 0;
+	G.supplyCount[2] = 0;
+
+	if (isGameOver(&G)) {
+		printf("Passed\n\n");
+	}
+	else {
+		printf("Failed\n\n");
+	}
+
+	return 0;
 }

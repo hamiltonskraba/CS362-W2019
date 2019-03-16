@@ -1,32 +1,61 @@
-/**
- * gcc test_helper.c rngs.c dominion.c cardtest4.c -lm -o testing -std=c99
- * Tests card: Village
- * Uses cardEffect as entry point
- * */
 #include <stdio.h>
 #include <stdlib.h>
 #include "dominion.h"
 #include "dominion_helpers.h"
-#include "test_helper.h"
-// int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState *state, int handPos, int *bonus)
-// int villageCard(int currentPlayer, struct gameState *state, int handPos);
 
-void testVillageCard()
-{
-  struct gameState *state = newGame();
-  int *kCards = kingdomCards(0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
-  initializeGame(2, kCards, 1, state);
+//card test for Adventurer
 
-  cardEffect(village, 0, 0, 0, state, 0, 0);
-  assertEqual("adds and removes a card to hand", 5, state->handCount[0]);
-  assertEqual("a card is played", 1, state->playedCardCount);
-  assertEqual("removes one card from the deck", 4, state->deckCount[0]);
-  assertEqual("should get an extra 2 actions", 1 + 2, state->numActions);
-}
+int main(){
+	struct gameState G;
 
-int main()
-{
-  testVillageCard();
+	int k[10] = { adventurer, council_room, gardens, mine, smithy, village, great_hall, minion, tribute, ambassador };
 
-  return 0;
+	printf("---Testing Adventurer Card---\n");
+
+	initializeGame(2, k, 1000, &G);
+
+	//play smithy card
+	cardEffect(adventurer, 0, 0, 0, &G, 0, 0);
+	printf("Testing for +2 treasures added: ");
+	int handCount = G.handCount[0];
+	if(handCount == 7){
+		printf("Passed! The hand has %d cards\n", handCount);
+	} else{
+		printf("Failed! The hand has %d cards\n", handCount);
+	}
+
+	printf("Testing if copper deck count was altered: ");
+	int fullCount = fullDeckCount(0, copper, &G);
+	if(fullCount == 7){
+		printf("Passed! The hand has %d coppers\n", fullCount);
+	} else{
+		printf("Failed! The hand has %d coppers\n", fullCount);
+	}
+
+	//end turn so opponent can draw
+	endTurn(&G);
+	
+	printf("Testing if Opponent's deck count was altereted: ");
+	int opCount = G.handCount[1];
+	if(opCount == 5){
+		printf("Passed! Opponent's deck count unaltered\n");
+	} else{
+		printf("Failed! Opponent's deck count is %d", opCount);
+	}
+
+	printf("Testing for change in Victory supply cards: ");
+	if(G.supplyCount[estate] != 8){
+		printf("Failed! Estate supply altered\n");
+	}
+	else if(G.supplyCount[duchy] != 8){
+		printf("Failed! Duchy supply altered\n");
+	}
+	else if(G.supplyCount[province] != 8){
+		printf("Failed! Province supply altered\n");
+	}
+	else {
+		printf("Passed! Correct Victory card supply maintained\n");
+	}
+
+	return 0;
 }

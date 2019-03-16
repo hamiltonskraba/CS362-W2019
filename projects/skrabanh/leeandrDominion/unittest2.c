@@ -1,47 +1,63 @@
-/**
- * gcc test_helper.c rngs.c dominion.c unittest2.c -lm -o testing -std=c99
- * 
- * Tests shuffle in dominion.c
- * */
-
 #include <stdlib.h>
 #include <stdio.h>
-#include <string.h>
 #include "dominion.h"
-#include "test_helper.h"
+#include "dominion_helpers.h"
 
-void testShuffle()
-{
-  struct gameState *state = newGame();
-  struct gameState *state_1 = newGame();
-  int *kCards = kingdomCards(0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
-  assertEqual("returns error on empty state", -1, shuffle(1, state));
 
-  initializeGame(1, kCards, 1, state);
-  initializeGame(1, kCards, 1, state_1);
-  assertEqual("returns error on initialized, but empty deck", -1, shuffle(1, state));
+//unit test for supplyCount()
 
-  state->deckCount[1] = 5;
-  state_1->deckCount[1] = 5;
-  assertEqual("empty user deck still runs", 0, shuffle(1, state));
-  shuffle(1, state_1);
+int main(){	
+	int seed = 1000;
+	int k[10] = { adventurer, council_room, gardens, mine, smithy, village, great_hall, minion, tribute, ambassador };
+	struct gameState G2, G3;
 
-  int difference = 0;
+	printf("---Testing supplyCount()---\n");
 
-  for (int i = 0; i < 5; i++)
-  {
-    difference += state->deck[0][i] - state_1->deck[0][i];
-  }
+	initializeGame(2, k, seed, &G2);	//initialize 2 seperate games with different amount of players
+	initializeGame(3, k, seed, &G3);
 
-  assertEqual("state shuffle should be equal", 0, difference);
+	//game initialized to 2 players; there should be 10 curse cards available
+	printf("Curse cards for a 2 player game should be 10: ");
+	if(G2.supplyCount[curse] == 10){
+		printf("Passed\n");
+	} else {
+		printf("Failed\n");
+	}	
 
-  free(state);
-  free(state_1);
-  free(kCards);
-}
+	printf("Curse cards for a 3 player game should be 20: ");
+	if(G3.supplyCount[curse] == 20){
+		printf("Passed\n");
+	} else {
+		printf("Failed\n");
+	}
+	
+	printf("A player gains a curse in the 2 player game, resulting in a count of 9 available in the supply pile: ");
+	gainCard(curse, &G2, 0, 0);
+	if(G2.supplyCount[curse] == 9){
+		printf("Passed\n");
+	} else {
+		printf("Failed\n");
+	}	
 
-int main()
-{
-  testShuffle();
-  return 0;
+	printf("Testing a pile after all cards drawn: ");
+	int i;
+	for(i = 0; i < 20; i++){			//draw 20 curse cards
+		gainCard(curse, &G3, 0, 0);
+	}
+	if(G3.supplyCount[curse] == 0){
+		printf("Passed\n");
+	} else {
+		printf("Failed\n");
+	}	
+
+	printf("Testing for an invalid number of curse cards avilable: ");
+	G2.supplyCount[curse] = -1;
+	if(G2.supplyCount[curse] == -1){
+		printf("Passed\n");
+	} else {
+		printf("Failed\n");
+	}
+
+
+	return 0;
 }
